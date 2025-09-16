@@ -1,0 +1,4 @@
+{
+  "python.defaultInterpreterPath": "/Users/chadcasper/.pyenv/versions/miniforge3-4.10.3-10/envs/exp-tracking/bin/python",
+  "python.useEnvironmentsExtension": true
+}

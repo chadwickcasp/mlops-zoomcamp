@@ -1,15 +1,20 @@
-{
-  // Pin THIS project to the mlops-zoomcamp environment
-  "python.defaultInterpreterPath": "/Users/chadcasper/.pyenv/versions/miniforge3-4.10.3-10/envs/mlops-zoomcamp/bin/python",
+// {
+//   // Pin THIS project to the mlops-zoomcamp environment
+//   "python.defaultInterpreterPath": "/Users/chadcasper/.pyenv/versions/miniforge3-4.10.3-10/envs/mlops-zoomcamp/bin/python",
 
-  // Make sure the extension uses the new discovery
-  "python.useEnvironmentsExtension": true,
+//   // Make sure the extension uses the new discovery
+//   "python.useEnvironmentsExtension": true,
   
-  "python-envs.pythonProjects": [
-    {
-      "path": "",
-      "envManager": "ms-python.python:conda",
-      "packageManager": "ms-python.python:conda"
-    }
-  ]
+//   "python-envs.pythonProjects": [
+//     {
+//       "path": "",
+//       "envManager": "ms-python.python:conda",
+//       "packageManager": "ms-python.python:conda"
+//     }
+//   ]
+// }
+
+{
+  "python.defaultInterpreterPath": "/Users/chadcasper/.pyenv/versions/miniforge3-4.10.3-10/envs/mlops-zoomcamp/bin/python",
+  "python.useEnvironmentsExtension": true
 }
