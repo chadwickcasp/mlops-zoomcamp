@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/chadcasper/Documents/MLOps%20Zoomcamp/mlops-zoomcamp/02-experiment-tracking/homework/mlruns/1/e5ad4ab127b6486ab76e81e50dc34332/artifacts
+end_time: 1758603561439
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: e5ad4ab127b6486ab76e81e50dc34332
+run_uuid: e5ad4ab127b6486ab76e81e50dc34332
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758603552371
+status: 3
+tags: []
+user_id: chadcasper

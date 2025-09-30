@@ -1,0 +1,4 @@
+artifact_location: file:///Users/chadcasper/Documents/MLOps%20Zoomcamp/mlops-zoomcamp/02-experiment-tracking/running-mlflow-examples/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: my-experiment-1
