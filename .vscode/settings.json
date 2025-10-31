@@ -16,5 +16,8 @@
 
 {
   "python.defaultInterpreterPath": "/Users/chadcasper/.pyenv/versions/miniforge3-4.10.3-10/envs/mlops-zoomcamp/bin/python",
-  "python.useEnvironmentsExtension": true
+  "python.useEnvironmentsExtension": true,
+  "python-envs.defaultEnvManager": "ms-python.python:conda",
+  "python-envs.defaultPackageManager": "ms-python.python:conda",
+  "python-envs.pythonProjects": []
 }
