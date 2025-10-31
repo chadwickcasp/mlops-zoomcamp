@@ -211,3 +211,10 @@ __marimo__/
 *.model
 *.pkl
 *.h5
+
+# Private key files
+*.pem
+*.key
+*.crt
+*.cert
+
