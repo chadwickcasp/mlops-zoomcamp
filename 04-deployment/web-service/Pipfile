@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+git-filter-repo = "==2.47.0"
+flask = "==2.1.2"
+werkzeug = "==2.1.2"
+jinja2 = "==3.1.2"
+markupsafe = "==2.1.1"
+itsdangerous = "==2.1.2"
+click = "==8.1.2"
+blinker = "==1.4"
+scikit-learn = "==1.0.2"
+numpy = "==1.21.5"
+scipy = "==1.7.3"
+joblib = "==1.1.0"
+threadpoolctl = "==3.1.0"
+gunicorn = "==20.1.0"
+
+[dev-packages]
+requests = "==2.27.1"
+urllib3 = "==1.26.9"
+charset-normalizer = "==2.0.12"
+idna = "==3.3"
+certifi = "==2021.10.8"
+
+[requires]
+python_version = "3.9"
