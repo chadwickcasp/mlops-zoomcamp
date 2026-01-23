@@ -1,0 +1,69 @@
+name: monitoring
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9.12
+  - pip=22.0.4
+
+  # scientific stack (May/June 2022 compatible)
+  - numpy=1.21.5
+  - scipy=1.7.3
+  - scikit-learn=1.0.2
+  - pandas=1.4.2
+  - statsmodels=0.13.5
+  - tqdm=4.64.0
+
+  # web/service deps (course-compatible)
+  - flask=2.2.2
+  - werkzeug=2.2.3
+  - requests=2.27.1
+  - prometheus_client=0.11.0
+  - pyyaml=5.4.1
+
+  - pip:
+      - evidently==0.1.51.dev0
+      - plotly==5.8.2
+      - pymongo==4.1.1
+      - dnspython==2.2.1
+      - prefect==2.0b5
+      - pydantic==1.9.1  # Required for Prefect 2.0b5 compatibility (BaseSettings moved in v2)
+      - typing_extensions==4.2.0  # Required for Prefect 2.0b5 type hints
+      - typer==0.6.1  # Required for Prefect CLI
+      - shellingham==1.4.0  # Required by typer
+      - rich==12.4.4  # Required for Prefect CLI output
+      - pygments==2.12.0  # Required by rich
+      - commonmark==0.9.1  # Required by rich
+      - coolname==1.1.0  # Required for Prefect naming
+      - readchar==4.0.3  # Required by typer
+      - python-slugify==6.1.2  # Required for Prefect naming
+      - text-unidecode==1.3  # Required by python-slugify
+      - croniter==1.3.1  # Required for Prefect schedules
+      - pendulum==2.1.2  # Required for Prefect datetime handling
+      - pytzdata==2020.1  # Required by pendulum
+      - toml==0.10.2  # Required for Prefect config
+      - aiofiles==0.8.0  # Required for async file operations
+      - fastapi==0.78.0  # Required for Prefect 2.0b5, compatible with Pydantic 1.9.1
+      - starlette==0.19.1  # Required by FastAPI 0.78.0
+      - uvicorn==0.17.6  # ASGI server for FastAPI
+      - asgi_lifespan==1.0.1  # Required by FastAPI/Orion
+      - asgiref==3.5.2  # Required by FastAPI/Orion
+      - anyio==3.6.1  # Required for Prefect 2.0b5 (start_blocking_portal function)
+      - httpx==0.22.0  # Required for Prefect 2.0b5 HTTP client
+      - httpcore==0.14.7  # Required by httpx 0.22.0
+      - aiosqlite==0.17.0  # Required for Prefect 2.0b5 local database
+      - sqlalchemy==1.4.36  # Required for Prefect 2.0b5 database
+      - alembic==1.7.7  # Required for Prefect 2.0b5 database migrations
+      - mako==1.2.0  # Required by alembic
+      - greenlet==1.1.2  # Required by sqlalchemy
+      - sqlite-utils==3.27  # Required for Prefect database utilities
+      - click-default-group-wheel==1.2.2  # Required by sqlite-utils
+      - sqlite-fts4==1.0.3  # Required by sqlite-utils
+      - sniffio==1.2.0  # Required by httpx/anyio
+      - h11==0.12.0  # Required by httpx
+      - rfc3986[idna2008]==1.5.0  # Required by httpx
+      - idna==3.3  # Required by httpx
+      - certifi==2021.10.8  # Required by httpx
+      - charset-normalizer==2.0.12  # Required by httpx
+
+      # pyarrow via pip on osx-arm64 (avoids conda solver drama)
+      - pyarrow==8.0.0

@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+# Pinned the versions of the packages to the ones that are compatible with the versions that were already pinned here
+# Packages pinned by me: pyarrow, pandas, pymongo, evidently
+
+[packages]
+scikit-learn = "==1.0.2"
+pyarrow = "==5.0.0"
+prefect = "==2.0b8"
+pandas = "==1.1.5"
+pymongo = "==4.0.1"
+psutil = "==5.9.1"
+evidently = "==0.1.51.dev0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
