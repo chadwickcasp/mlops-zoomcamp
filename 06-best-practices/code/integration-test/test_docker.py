@@ -1,8 +1,8 @@
 # pylint: disable=duplicate-code
 
 import json
-import requests
 
+import requests
 from deepdiff import DeepDiff
 
 with open('event.json', 'rt', encoding='utf-8') as file:
@@ -21,7 +21,7 @@ expected_response = {
             'prediction': {
                 'ride_duration': 18.17,
                 'ride_id': 156,
-            }
+            },
         }
     ]
 }

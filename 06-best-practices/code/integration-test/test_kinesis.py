@@ -1,14 +1,16 @@
 # pylint: disable=duplicate-code
 
 import os
-import boto3
 import json
 from pprint import pprint
 
+import boto3
 from deepdiff import DeepDiff
 
 kinesis_endpoint_url = os.getenv('KINESIS_ENDPOINT_URL', 'http://localhost:4566')
-kinesis_client = boto3.client('kinesis', region_name='us-west-1', endpoint_url=kinesis_endpoint_url)
+kinesis_client = boto3.client(
+    'kinesis', region_name='us-west-1', endpoint_url=kinesis_endpoint_url
+)
 
 stream_name = os.getenv('PREDICTIONS_STREAM_NAME', 'ride_predictions')
 shard_id = 'shardId-000000000000'
@@ -39,7 +41,7 @@ expected_record = {
     'prediction': {
         'ride_duration': 18.17,
         'ride_id': 156,
-    }
+    },
 }
 
 diff = DeepDiff(actual_record, expected_record, significant_digits=2)
