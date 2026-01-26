@@ -8,3 +8,8 @@ disable = [
     "too-few-public-methods",
     "no-self-use"
 ]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+skip-string-normalization = true

@@ -16,12 +16,12 @@ shard_id = 'shardId-000000000000'
 shard_iterator_id = kinesis_client.get_shard_iterator(
     StreamName=stream_name,
     ShardId=shard_id,
-    ShardIteratorType='TRIM_HORIZON'
+    ShardIteratorType='TRIM_HORIZON',
 )['ShardIterator']
 
 records = kinesis_client.get_records(
     ShardIterator=shard_iterator_id,
-    Limit=1
+    Limit=1,
 )
 
 records = records['Records']
@@ -38,7 +38,7 @@ expected_record = {
     'version': "Test123",
     'prediction': {
         'ride_duration': 18.17,
-        'ride_id': 156
+        'ride_id': 156,
     }
 }
 

@@ -20,7 +20,7 @@ expected_response = {
             'version': "Test123",
             'prediction': {
                 'ride_duration': 18.17,
-                'ride_id': 156
+                'ride_id': 156,
             }
         }
     ]

@@ -67,8 +67,8 @@ class ModelService:
                 'version': self.model_version,
                 'prediction': {
                     'ride_duration': prediction,
-                    'ride_id': ride_id
-                }
+                    'ride_id': ride_id,
+                },
             }
 
             for callback in self.callbacks:
@@ -76,9 +76,7 @@ class ModelService:
 
             prediction_events.append(prediction_event)
 
-        return {
-            'prediction_events': prediction_events
-        }
+        return {'prediction_events': prediction_events}
 
 class KinesisCallback():
     def __init__(self, kinesis_client, prediction_stream_name):
@@ -90,7 +88,7 @@ class KinesisCallback():
         self.kinesis_client.put_record(
             StreamName = self.prediction_stream_name,
             Data = json.dumps(prediction_event),
-            PartitionKey = str(ride_id)
+            PartitionKey = str(ride_id),
         )
 
 def create_kinesis_client():

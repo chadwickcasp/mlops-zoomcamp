@@ -14,9 +14,9 @@ def test_base64_decode():
         "ride": {
             "PULocationID": 130,
             "DOLocationID": 205,
-            "trip_distance": 3.66
+            "trip_distance": 3.66,
         },
-        "ride_id": 156
+        "ride_id": 156,
     }
     assert actual_ride_event == expected_ride_event
 
@@ -26,7 +26,7 @@ def test_prepare_features():
     ride = {
             "PULocationID": 130,
             "DOLocationID": 205,
-            "trip_distance": 3.66
+            "trip_distance": 3.66,
     }
     
     actual_features = model_service.prepare_features(ride)
@@ -34,7 +34,7 @@ def test_prepare_features():
     expected_features = {
         "PU_DO": "130_205",
         # "PU_DO": "130_206",
-        "trip_distance": 3.66
+        "trip_distance": 3.66,
     }
     assert actual_features == expected_features
 
@@ -51,7 +51,7 @@ def test_predict():
     model_service = model.ModelService(model_mock, "123")
     features = {
         "PU_DO": "130_205",
-        "trip_distance": 3.66
+        "trip_distance": 3.66,
     }
     actual_prediction = model_service.predict(features)
     expected_prediction = 18.168945726405333
@@ -72,13 +72,14 @@ def test_lambda_handler():
     }
     actual_prediction_events = model_service.lambda_handler(event, None)
     expected_prediction_events = {
-            'prediction_events': [{
+            'prediction_events': [
+                {
                 'model': 'ride_duration_prediction_model',
                 'version': "123",
                 'prediction': {
                     'ride_duration': 18.168945726405333,
-                    'ride_id': 156
-                }
+                    'ride_id': 156,
+                },
             }
         ]
     }
