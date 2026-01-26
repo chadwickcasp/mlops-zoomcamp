@@ -1,7 +1,7 @@
 FROM public.ecr.aws/lambda/python:3.9
 
 # Copy function code
-COPY lambda_function.py ./
+COPY lambda_function.py model.py ./
 
 # Install pipenv and then the specified packages
 COPY Pipfile Pipfile.lock ./

@@ -1,0 +1,11 @@
+{
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.testing.cwd": "${workspaceFolder}/06-best-practices/code",
+  "python.defaultInterpreterPath": "/Users/chadcasper/.local/share/virtualenvs/code-3NdwY-C5/bin/python",
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true
+}
