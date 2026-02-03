@@ -218,3 +218,10 @@ __marimo__/
 *.crt
 *.cert
 
+# Terraform
+.terraform/
+# .terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
