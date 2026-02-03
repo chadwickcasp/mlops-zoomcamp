@@ -20,16 +20,3 @@ services:
       - "4566:4566"
     environment:
       - SERVICES=kinesis
-  # volumes:
-  #   - "${HOME}/.aws:/root/.aws:ro"
-
-
-
-    # docker run -it --rm \
-    # -p 8080:8080 \
-    # -e PREDICTIONS_STREAM_NAME="ride_predictions" \
-    # -e RUN_ID="ecfa50f261e64914817112759fbbfc48" \
-    # -e TEST_RUN="True" \
-    # -e AWS_DEFAULT_REGION="us-west-1" \
-    # -v "${HOME}/.aws:/root/.aws:ro" \
-    # ${LOCAL_IMAGE_NAME}

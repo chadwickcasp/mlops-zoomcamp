@@ -1,0 +1,7 @@
+source_stream_name         = "stg_ride_events"
+output_stream_name         = "stg_ride_predictions"
+model_bucket               = "stg-mlflow-models"
+ecr_repo_name              = "stg_stream_model_duration"
+lambda_function_local_path = "../lambda_function.py"
+dockerfile_local_path      = "../Dockerfile"
+lambda_function_name       = "stg_ride_prediction_lambda"

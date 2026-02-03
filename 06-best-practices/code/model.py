@@ -7,7 +7,6 @@ import mlflow
 
 AWS_REGION = os.getenv('AWS_REGION') or os.getenv('AWS_DEFAULT_REGION') or 'us-west-1'
 os.environ.setdefault('AWS_REGION', AWS_REGION)
-# kinesis_client = boto3.client('kinesis', region_name=AWS_REGION)
 
 
 def get_model_location(run_id: str):
@@ -57,14 +56,11 @@ class ModelService:
 
     def lambda_handler(self, event, context):
         # pylint: disable=unused-argument
-
-        # print(json.dumps(event))
         prediction_events = []
 
         for record in event['Records']:
             encoded_data = record['kinesis']['data']
             ride_event = base64_decode(encoded_data)
-            # print(ride_event)
             ride = ride_event['ride']
             ride_id = ride_event['ride_id']
 

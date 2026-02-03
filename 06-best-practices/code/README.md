@@ -98,4 +98,61 @@ Echoing and grepping into base64 -d gives:
 {"model": "ride_duration_prediction_model", "version": "Test123", "prediction"}}
 ```
 
+After familiarizing and setting up linting and reformatting, we want to be able to run a script with all the CI we've done so far.
+
+We have without makefiles:
+```bash
+isort .
+black .
+pylint --recursive=y .
+pytest tests/
+```
+
+To prepare the project, run:
+```bash
+make setup
+```
+
+Now that we're using Terraform, we navigate to the directory and use:
+```bash
+terraform init
+terraform plan -var-file=vars/stg.tfvars
+terraform apply -var-file=vars/stg.tfvars
+```
+
+Once we've confirmed that the pipeline lands, we can test it with a test input event:
+```bash
+export KINESIS_STREAM_INPUT="stg_ride_events-mlops-zoomcamp"
+aws kinesis put-record \
+  --stream-name "$KINESIS_STREAM_INPUT" \       
+  --partition-key 1 \
+  --cli-binary-format raw-in-base64-out \                                                       
+  --data '{                           
+        "ride": {
+            "PULocationID": 130,
+            "DOLocationID": 205,
+            "trip_distance": 3.66
+        }, 
+        "ride_id": 156
+    }'
+```
+
+Then to see records via CloudWatch, use the appropriate shardId:
+```bash
+KINESIS_STREAM_OUTPUT='stg_ride_predictions-mlops-zoomcamp'
+SHARD='shardId-000000000000'
+
+SHARD_ITERATOR=$(aws kinesis \
+    get-shard-iterator \
+        --shard-id ${SHARD} \
+        --shard-iterator-type TRIM_HORIZON \
+        --stream-name ${KINESIS_STREAM_OUTPUT} \
+        --query 'ShardIterator' \
+)
+
+RESULT=$(aws kinesis get-records --shard-iterator "${SHARD_ITERATOR}" --limit 25)
+echo "${RESULT}" | jq
+```
+
+
 

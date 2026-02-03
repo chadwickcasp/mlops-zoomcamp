@@ -27,6 +27,7 @@ deepdiff = "==5.8.1"
 pylint = "==2.13.9"
 black = "==22.6.0"
 isort = "==5.10.1"
+pre-commit = "==2.20.0"
 
 [scripts]
 test = "pytest"
