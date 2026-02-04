@@ -1,0 +1,2 @@
+# Ensure shell scripts use LF in repo and on checkout (avoids "unexpected end of file" in CI)
+*.sh text eol=lf
