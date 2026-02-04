@@ -46,7 +46,9 @@ jobs:
         working-directory: "06-best-practices/code/integration-test"
         # run: |
         #   . run.sh
-        run: bash run.sh
+        # run: bash run.sh
+        run: |
+          sed 's/\r$//' run.sh | bash -s
         
 
   tf-plan:

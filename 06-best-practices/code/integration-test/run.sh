@@ -3,7 +3,8 @@
 set -e
 
 if [[ -z "${GITHUB_ACTIONS}" ]]; then
-    cd "$(dirname "$0")"
+  cd "$(dirname "$0")"
+fi
 
 if [ "${LOCAL_IMAGE_NAME}" == "" ]; then
     LOCAL_TAG=$(date +"%Y-%m-%d_%H-%M")
@@ -58,3 +59,4 @@ if [ $ERROR_CODE -ne 0 ]; then
 fi
 
 docker-compose down
+
