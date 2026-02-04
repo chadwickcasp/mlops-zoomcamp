@@ -2,6 +2,16 @@
 
 set -e
 
+# Use Docker Compose V2 plugin if available, else standalone docker-compose
+if docker compose version &>/dev/null; then
+  DOCKER_COMPOSE="docker compose"
+elif command -v docker-compose &>/dev/null; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  echo "Neither 'docker compose' nor 'docker-compose' found. Install Docker Compose."
+  exit 1
+fi
+
 if [[ -z "${GITHUB_ACTIONS}" ]]; then
   cd "$(dirname "$0")"
 fi
@@ -18,7 +28,7 @@ fi
 
 PREDICTIONS_STREAM_NAME="ride_predictions"
 
-docker-compose up -d
+${DOCKER_COMPOSE} up -d
 
 sleep 1
 
@@ -43,8 +53,8 @@ pipenv run python test_docker.py
 ERROR_CODE=$?
 
 if [ $ERROR_CODE -ne 0 ]; then
-    docker-compose logs
-    docker-compose down
+    ${DOCKER_COMPOSE} logs
+    ${DOCKER_COMPOSE} down
     exit ${ERROR_CODE}
 fi
 
@@ -53,10 +63,10 @@ pipenv run python test_kinesis.py
 ERROR_CODE=$?
 
 if [ $ERROR_CODE -ne 0 ]; then
-    docker-compose logs
-    docker-compose down
+    ${DOCKER_COMPOSE} logs
+    ${DOCKER_COMPOSE} down
     exit ${ERROR_CODE}
 fi
 
-docker-compose down
+${DOCKER_COMPOSE} down
 
