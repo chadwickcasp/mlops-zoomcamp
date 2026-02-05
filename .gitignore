@@ -211,6 +211,8 @@ __marimo__/
 *.model
 *.pkl
 *.h5
+# Exception: integration-test model for CI/local tests
+!06-best-practices/code/integration-test/model/model.pkl
 
 # Private key files
 *.pem
