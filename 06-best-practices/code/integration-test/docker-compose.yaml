@@ -4,13 +4,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}
-      # RUN_ID: "ecfa50f261e64914817112759fbbfc48"
+      - PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME:-ride_predictions}
       - RUN_ID=Test123
-      # TEST_RUN: "True"
-      - AWS_DEFAULT_REGION=us-west-1
       - MODEL_LOCATION=/app/model
       - KINESIS_ENDPOINT_URL=http://kinesis:4566
+      - AWS_DEFAULT_REGION=us-west-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
     volumes:
       - "${HOME}/.aws:/root/.aws:ro"
       - "./model:/app/model:ro"
