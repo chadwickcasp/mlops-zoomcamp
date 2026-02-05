@@ -26,11 +26,12 @@ else
     echo "No need to build the image"
 fi
 
-PREDICTIONS_STREAM_NAME="ride_predictions"
+export PREDICTIONS_STREAM_NAME="ride_predictions"
 
-${DOCKER_COMPOSE} up -d
+# Pass PREDICTIONS_STREAM_NAME explicitly so docker-compose variable substitution works (CI runs script via pipe)
+PREDICTIONS_STREAM_NAME="${PREDICTIONS_STREAM_NAME:-ride_predictions}" ${DOCKER_COMPOSE} up -d
 
-sleep 1
+sleep 5
 
 # Delete stream if it exists (ignore errors if it doesn't)
 aws --endpoint-url=http://localhost:4566 \
