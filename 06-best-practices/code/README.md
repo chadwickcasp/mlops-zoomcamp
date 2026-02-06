@@ -155,8 +155,8 @@ echo "${RESULT}" | jq
 ```
 NOTE: This is what I naively though we could test the Lambda function with.
 However, this doesn't actually get at the recently put records in the output stream.
-This also doesn't lead to Records being posted to the CloudWatch Logs. For that,
-we need a print statement in the Lambda function/lambda handler.
+This also doesn't lead to Records being posted to the CloudWatch Logs (ase we saw in 04-deployment). 
+For that, we need a print statement in the Lambda function/lambda handler.
 ACTUALLY, use these commands ("LATEST" shard iterator type instead of "TRIM_HORIZON"):
 ```bash
 OUTPUT_STREAM="stg_ride_predictions-mlops-zoomcamp"

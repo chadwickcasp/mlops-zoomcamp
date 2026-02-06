@@ -1,4 +1,4 @@
-name: CI Test
+name: CI-Tests
 
 on:
   pull_request:
