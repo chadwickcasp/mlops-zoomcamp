@@ -68,7 +68,7 @@ output "lambda_function" {
 }
 
 output "model_bucket" {
-  value = "module.s3_bucket.name"
+  value = module.s3_bucket.name
 }
 
 output "predictions_stream_name" {

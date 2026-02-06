@@ -153,7 +153,39 @@ SHARD_ITERATOR=$(aws kinesis \
 RESULT=$(aws kinesis get-records --shard-iterator "${SHARD_ITERATOR}" --limit 25)
 echo "${RESULT}" | jq
 ```
+NOTE: This is what I naively though we could test the Lambda function with.
+However, this doesn't actually get at the recently put records in the output stream.
+This also doesn't lead to Records being posted to the CloudWatch Logs. For that,
+we need a print statement in the Lambda function/lambda handler.
+ACTUALLY, use these commands ("LATEST" shard iterator type instead of "TRIM_HORIZON"):
+```bash
+OUTPUT_STREAM="stg_ride_predictions-mlops-zoomcamp"
+SHARD="shardId-000000000001"                       
 
+ITERATOR=$(aws kinesis get-shard-iterator \
+  --stream-name "$OUTPUT_STREAM" \                     
+  --shard-id "$SHARD" \            
+  --shard-iterator-type LATEST \  
+  --region us-west-1 \                
+  --query 'ShardIterator' \              
+  --output text)      
+
+while true; do                  
+  RESULT=$(aws kinesis get-records \
+    --shard-iterator "$ITERATOR" \
+    --region us-west-1)             
+  ITERATOR=$(echo "$RESULT" | jq -r '.NextShardIterator')
+
+  COUNT=$(echo "$RESULT" | jq '.Records | length')       
+  if [ "$COUNT" -gt 0 ]; then
+    echo "$RESULT" | jq '.Records[] | {Data: (.Data | @base64d | fromjson), Timestamp: .ApproximateArrivalTimestamp}'
+    break                                                           
+  fi                                                  
+
+  sleep 1                                 
+done                                       
+```
+This waits for new records to be put into the stream (can run the put-record command in a separate terminal) and then prints them.
 
 
 

@@ -34,7 +34,7 @@ jobs:
       - name: TF apply
         id: tf-apply
         working-directory: '06-best-practices/code/infrastructure'
-        if: ${{ steps.tf-plan.outputs.changed }} == 'success'
+        if: ${{ steps.tf-plan.outcome }} == 'success'
         run: |
           terraform apply -auto-approve -var-file=vars/prod.tfvars
           echo "::set-output name=ecr_repo::$(terraform output -raw ecr_repo | xargs)"
@@ -57,9 +57,9 @@ jobs:
           IMAGE_TAG: "latest" # Can use ${{ github.sha }} for a specific version,
                               # commonly used for blue/green deployments
         run: |
-          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
+          docker build -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} .
+          docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+                    
       # Deploy 
       # The steps here are not suited for production.
       # In practice, retrieving the latest model version or RUN_ID from a service like MLflow 
@@ -80,6 +80,7 @@ jobs:
           export RUN_ID=$(aws s3api list-objects-v2 --bucket "$MODEL_BUCKET_DEV" --query \
           'Contents[?contains(Key, `/artifacts/`)] | sort_by(@, &LastModified)[-1].Key' \
           --output text | sed -E 's|(.*)/artifacts/.*|\1|' | grep -oE '[0-9a-f]{32}' | head -1)
+          echo "::set-output name=run_id::${RUN_ID}"
           aws s3 sync s3://$MODEL_BUCKET_DEV s3://$MODEL_BUCKET_PROD
 
       - name: Update the Lambda function 
@@ -91,14 +92,15 @@ jobs:
           MODEL_BUCKET_PROD: ${{ steps.tf-apply.outputs.model_bucket }}
           RUN_ID: ${{ steps.get-model-artifacts.outputs.run_id }}
         run: |
-          variables="MODEL_BUCKET=${MODEL_BUCKET_PROD}, PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}, RUN_ID=${RUN_ID}, \
-          TEST_RUN=False" 
+          variables="{MODEL_BUCKET=${MODEL_BUCKET_PROD}, PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}, RUN_ID=${RUN_ID}, \
+          TEST_RUN=False}"
+
           # Wait for the Lambda function to be in the InProgress state
-          STATE=$(aws lambda get-function --function-name $LAMBDA_FUNCTION --query 'Configuration.State' --output text)
-          while [ "$STATE" != "InProgress" ]; do
-            echo "Lambda function is not active, waiting for 5 seconds..."
+          STATE=$(aws lambda get-function --function-name $LAMBDA_FUNCTION --query 'Configuration.LastUpdateStatus' --output text)
+          while [ "$STATE" == "InProgress" ]; do
+            echo "Lambda function is still updating, waiting for 5 seconds..."
             sleep 5
-            STATE=$(aws lambda get-function --function-name $LAMBDA_FUNCTION --query 'Configuration.State' --output text)
+            STATE=$(aws lambda get-function --function-name $LAMBDA_FUNCTION --query 'Configuration.LastUpdateStatus' --output text)
           done
           aws lambda update-function-configuration --function-name $LAMBDA_FUNCTION --environment "Variables=${variables}"
 
