@@ -1,7 +1,7 @@
 # 
 
 resource "aws_iam_role" "iam_lambda" {
-  name               = "iam_lambda_stg"
+  name               = "iam_lambda_${var.lambda_function_name}"
   assume_role_policy = <<EOF
   {
   "Version": "2012-10-17",
@@ -23,7 +23,7 @@ resource "aws_iam_role" "iam_lambda" {
 }
 
 resource "aws_iam_policy" "kinesis_processing" {
-  name        = "kinesis_processing"
+  name        = "kinesis_processing_${var.lambda_function_name}"
   path        = "/"
   description = "IAM policy for logging from a Lambda function"
   policy      = <<EOF
@@ -92,7 +92,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_trigger_lambda_function" {
 }
 
 resource "aws_iam_policy" "allow_logging" {
-  name        = "allow_logging"
+  name        = "allow_logging_${var.lambda_function_name}"
   path        = "/"
   description = "IAM policy for logging from a Lambda function"
   policy      = <<EOF
@@ -121,7 +121,7 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 # IAM for S3 bucket
 
 resource "aws_iam_policy" "allow_s3_bucket" {
-  name        = "lambda_s3_policy"
+  name        = "lambda_s3_policy_${var.lambda_function_name}"
   description = "IAM policy for accessing a S3 bucket"
   # Attach bucket information, permissions for specific model bucket, and permissions for CloudWatch and Auto Scaling
   policy = <<EOF
