@@ -14,39 +14,39 @@ awsx() {
   aws --profile "$AWS_PROFILE" --region "$AWS_DEFAULT_REGION" "$@"
 }
 
-# 1. Find the most recently modified object that lives under */artifacts/*
-LATEST_KEY=$(
-  aws s3api list-objects-v2 \
-    --bucket "$MODEL_BUCKET_DEV" \
-    --query '
-      Contents[?
-        contains(Key, `/artifacts/`)
-      ] | sort_by(@, &LastModified)[-1].Key
-    ' \
-    --output text
-)
+# # 1. Find the most recently modified object that lives under */artifacts/*
+# LATEST_KEY=$(
+#   aws s3api list-objects-v2 \
+#     --bucket "$MODEL_BUCKET_DEV" \
+#     --query '
+#       Contents[?
+#         contains(Key, `/artifacts/`)
+#       ] | sort_by(@, &LastModified)[-1].Key
+#     ' \
+#     --output text
+# )
 
-if [[ -z "$LATEST_KEY" || "$LATEST_KEY" == "None" ]]; then
-  echo "ERROR: No artifacts found in bucket ${MODEL_BUCKET_DEV}" >&2
-  exit 1
-fi
+# if [[ -z "$LATEST_KEY" || "$LATEST_KEY" == "None" ]]; then
+#   echo "ERROR: No artifacts found in bucket ${MODEL_BUCKET_DEV}" >&2
+#   exit 1
+# fi
 
-echo "Latest artifact key:"
-echo "  $LATEST_KEY"
+# echo "Latest artifact key:"
+# echo "  $LATEST_KEY"
 
-# 2. Extract the run directory (strip /artifacts/...)
-LATEST_RUN_DIR=$(echo "$LATEST_KEY" | sed -E 's|(.*)/artifacts/.*|\1|')
+# # 2. Extract the run directory (strip /artifacts/...)
+# LATEST_RUN_DIR=$(echo "$LATEST_KEY" | sed -E 's|(.*)/artifacts/.*|\1|')
 
-echo "Latest run directory:"
-echo "  $LATEST_RUN_DIR"
+# echo "Latest run directory:"
+# echo "  $LATEST_RUN_DIR"
 
-# 3. Extract the MLflow RUN_ID (32 hex chars)
-RUN_ID=$(echo "$LATEST_RUN_DIR" | grep -oE '[0-9a-f]{32}' | head -n 1)
+# # 3. Extract the MLflow RUN_ID (32 hex chars)
+# RUN_ID=$(echo "$LATEST_RUN_DIR" | grep -oE '[0-9a-f]{32}' | head -n 1)
 
-if [[ -z "$RUN_ID" ]]; then
-  echo "ERROR: Could not extract RUN_ID from path: $LATEST_RUN_DIR" >&2
-  exit 1
-fi
+RUN_ID=$(aws s3api list-objects-v2 --bucket "$MODEL_BUCKET_DEV" --query 'Contents[?contains(Key, `/artifacts/`)] | sort_by(@, &LastModified)[-1].Key' --output text \
+  | sed -E 's|(.*)/artifacts/.*|\1|' | grep -oE '[0-9a-f]{32}' | head -1)
+
+[[ -z "$RUN_ID" ]] && { echo "ERROR: No artifacts in ${MODEL_BUCKET_DEV}" >&2; exit 1; }
 
 export RUN_ID
 echo "Resolved RUN_ID:"

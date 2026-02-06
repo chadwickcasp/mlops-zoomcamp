@@ -2,8 +2,19 @@
 
 set -e
 
+# Use Docker Compose V2 plugin if available, else standalone docker-compose
+if docker compose version &>/dev/null; then
+  DOCKER_COMPOSE="docker compose"
+elif command -v docker-compose &>/dev/null; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  echo "Neither 'docker compose' nor 'docker-compose' found. Install Docker Compose."
+  exit 1
+fi
+
 if [[ -z "${GITHUB_ACTIONS}" ]]; then
-    cd "$(dirname "$0")"
+  cd "$(dirname "$0")"
+fi
 
 if [ "${LOCAL_IMAGE_NAME}" == "" ]; then
     LOCAL_TAG=$(date +"%Y-%m-%d_%H-%M")
@@ -15,11 +26,12 @@ else
     echo "No need to build the image"
 fi
 
-PREDICTIONS_STREAM_NAME="ride_predictions"
+export PREDICTIONS_STREAM_NAME="ride_predictions"
 
-docker-compose up -d
+# Pass PREDICTIONS_STREAM_NAME explicitly so docker-compose variable substitution works (CI runs script via pipe)
+PREDICTIONS_STREAM_NAME="${PREDICTIONS_STREAM_NAME:-ride_predictions}" ${DOCKER_COMPOSE} up -d
 
-sleep 1
+sleep 5
 
 # Delete stream if it exists (ignore errors if it doesn't)
 aws --endpoint-url=http://localhost:4566 \
@@ -42,8 +54,8 @@ pipenv run python test_docker.py
 ERROR_CODE=$?
 
 if [ $ERROR_CODE -ne 0 ]; then
-    docker-compose logs
-    docker-compose down
+    ${DOCKER_COMPOSE} logs
+    ${DOCKER_COMPOSE} down
     exit ${ERROR_CODE}
 fi
 
@@ -52,9 +64,10 @@ pipenv run python test_kinesis.py
 ERROR_CODE=$?
 
 if [ $ERROR_CODE -ne 0 ]; then
-    docker-compose logs
-    docker-compose down
+    ${DOCKER_COMPOSE} logs
+    ${DOCKER_COMPOSE} down
     exit ${ERROR_CODE}
 fi
 
-docker-compose down
+${DOCKER_COMPOSE} down
+
