@@ -28,7 +28,7 @@ jobs:
         id: tf-plan
         working-directory: '06-best-practices/code/infrastructure'
         run: |
-          terraform init -backend-config="bucket=terraform-state-${{ secrets.AWS_ACCOUNT_ID }}" && \
+          terraform init -backend-config="key=mlops-zoomcamp-prod.tfstate" -reconfigure && \
           terraform plan -var-file=vars/prod.tfvars
 
       - name: TF apply
@@ -72,7 +72,7 @@ jobs:
         id: get-model-artifacts
         working-directory: '06-best-practices/code'
         env:
-          MODEL_BUCKET_DEV: "tf-state-mlops-remote433"
+          MODEL_BUCKET_DEV: "mlflow-artifacts-remote433"
           MODEL_BUCKET_PROD: ${{ steps.tf-apply.outputs.model_bucket }}
         run: |
           # export RUN_ID=$(aws s3api list-objects-v2 --bucket $MODEL_BUCKET_DEV --query \
@@ -94,7 +94,6 @@ jobs:
         run: |
           variables="{MODEL_BUCKET=${MODEL_BUCKET_PROD}, PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}, RUN_ID=${RUN_ID}, \
           TEST_RUN=False}"
-
           # Wait for the Lambda function to be in the InProgress state
           STATE=$(aws lambda get-function --function-name $LAMBDA_FUNCTION --query 'Configuration.LastUpdateStatus' --output text)
           while [ "$STATE" == "InProgress" ]; do
