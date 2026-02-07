@@ -1,0 +1,7 @@
+services:
+  aws-s3-server:
+    image: localstack/localstack:0.14.4
+    environment:
+      - SERVICES=s3
+    ports:
+      - "4566:4566"
